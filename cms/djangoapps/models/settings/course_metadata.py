@@ -60,6 +60,10 @@ class CourseMetadata(object):
         if not settings.FEATURES.get('ENABLE_EDXNOTES'):
             filtered_list.append('edxnotes')
 
+        # Do not show facebook_url if the feature is disabled.
+        if not settings.FEATURES.get('ENABLE_MOBILE_SOCIAL_FACEBOOK_FEATURES'):
+            filtered_list.append('facebook_url')
+
         return filtered_list
 
     @classmethod
