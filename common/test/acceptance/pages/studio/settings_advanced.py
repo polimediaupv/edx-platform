@@ -145,7 +145,7 @@ class AdvancedSettingsPage(CoursePage):
         If a new setting is added to the metadata list, this test will fail and you must update it.
         Basically this guards against accidental exposure of a field on the Advanced Settings screen
         """
-        valid_settings = [
+        return [
             'advanced_modules',
             'allow_anonymous',
             'allow_anonymous_to_peers',
@@ -199,5 +199,3 @@ class AdvancedSettingsPage(CoursePage):
             'annotation_storage_url',
             'video_upload_pipeline'
         ]
-
-        return valid_settings
