@@ -3,6 +3,7 @@
 """
 Acceptance tests for Video.
 """
+from flaky import flaky
 from nose.plugins.attrib import attr
 from unittest import skipIf, skip
 from ..helpers import UniqueCourseTest, is_youtube_available, YouTubeStubConfig
@@ -530,6 +531,7 @@ class YouTubeVideoTest(VideoBaseTest):
         self.go_to_sequential_position(1)
         execute_video_steps(tab1_video_names)
 
+    @flaky  # TODO: TNL-1671
     def test_video_component_stores_speed_correctly_for_multiple_videos(self):
         """
         Scenario: Video component stores speed correctly when each video is in separate sequential
@@ -620,6 +622,7 @@ class YouTubeVideoTest(VideoBaseTest):
 
         self.assertTrue(self.video.duration, '1.56')
 
+    @flaky  # TODO: TNL-1673
     def test_video_position_stored_correctly_wo_seek(self):
         """
         Scenario: Video component stores position correctly when page is reloaded
