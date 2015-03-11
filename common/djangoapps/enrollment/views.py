@@ -7,7 +7,7 @@ from ipware.ip import get_ip
 from django.conf import settings
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.locator import CourseLocator
-from openedx.core.djangoapps.user_api import api as user_api
+from openedx.core.djangoapps.user_api.preferences.api import update_email_opt_in
 from openedx.core.lib.api.permissions import ApiKeyHeaderPermission, ApiKeyHeaderPermissionIsAuthenticated
 from rest_framework import status
 from rest_framework import permissions
@@ -342,7 +342,7 @@ class EnrollmentListView(APIView, ApiKeyPermissionMixIn):
             email_opt_in = request.DATA.get('email_opt_in', None)
             if email_opt_in is not None:
                 org = course_id.org
-                user_api.profile.update_email_opt_in(request.user, org, email_opt_in)
+                update_email_opt_in(request.user, org, email_opt_in)
             return Response(response)
         except CourseModeNotFoundError as error:
             return Response(
