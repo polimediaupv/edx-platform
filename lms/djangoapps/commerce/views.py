@@ -8,7 +8,6 @@ from django.utils.translation import ugettext as _
 import jwt
 from opaque_keys.edx.keys import CourseKey
 import requests
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_406_NOT_ACCEPTABLE, HTTP_503_SERVICE_UNAVAILABLE, HTTP_202_ACCEPTED, HTTP_200_OK
 
@@ -18,6 +17,7 @@ from commerce.constants import OrderStatus
 from course_modes.models import CourseMode
 from courseware import courses
 from student.models import CourseEnrollment
+from util.authentication import SessionAuthenticationAllowInactiveUser
 from util.json_request import JsonResponse
 
 
@@ -43,7 +43,8 @@ class ApiErrorResponse(DetailResponse):
 class PurchaseView(APIView):
     """ Purchases course seats and enrolls users. """
 
-    authentication_classes = (SessionAuthentication,)
+    # LMS utilizes User.user_is_active to indicate email verification, not whether an account is active. Sigh!
+    authentication_classes = (SessionAuthenticationAllowInactiveUser,)
     permission_classes = (IsAuthenticated,)
 
     def _is_data_valid(self, request):

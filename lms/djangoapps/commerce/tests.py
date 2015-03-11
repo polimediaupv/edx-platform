@@ -156,12 +156,17 @@ class PurchaseViewTests(ModuleStoreTestCase):
         self.assertValidEcommerceApiErrorResponse(response)
         self.assertFalse(CourseEnrollment.is_enrolled(self.user, self.course.id))
 
+    @data(True, False)
     @httpretty.activate
-    def test_course_with_sku(self):
+    def test_course_with_sku(self, user_is_active):
         """
         If the course has a SKU, the view should get authorization from the E-Commerce API before enrolling
         the user in the course. If authorization is approved, the user should be redirected to the user dashboard.
         """
+
+        # Set user's active flag
+        self.user.is_active = user_is_active
+        self.user.save()    # pylint: disable=no-member
 
         def request_callback(_method, _uri, headers):
             """ Mock the E-Commerce API's call to the enrollment API. """
