@@ -457,7 +457,7 @@ class MongoBulkOpsMixin(BulkOperationsMixin):
             self.refresh_cached_metadata_inheritance_tree(course_id)
 
             if emit_signals and self.signal_handler:
-                self.signal_handler.send("course_published", course_key=course_id)
+                self.send_bulk_published_signal(bulk_ops_record, course_id)
 
             bulk_ops_record.dirty = False  # brand spanking clean now
 
@@ -468,6 +468,12 @@ class MongoBulkOpsMixin(BulkOperationsMixin):
         return super(MongoBulkOpsMixin, self)._is_in_bulk_operation(
             course_id.for_branch(None), ignore_case
         )
+
+    def send_bulk_published_signal(self, bulk_ops_record, course_id):
+        publish_items = bulk_ops_record.publish_items
+        if publish_items:
+            item_keys = [item for item in publish_items if item != course_id]
+            self.signal_handler.send("course_published", course_key=course_id, item_keys=item_keys)
 
 
 class ParentLocationCache(dict):
