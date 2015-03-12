@@ -640,9 +640,9 @@ class CohortConfigurationTest(UniqueCourseTest, CohortTestMixin):
 
 
 @attr('shard_3')
-class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
+class CohortDiscussionTopicsTest(CohortConfigurationTest):
     """
-    Tests for cohort the course-wide and inline discussion topics.
+    Tests for cohorting the inline and course-wide discussion topics.
     """
     def setUp(self):
         """
@@ -650,37 +650,6 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
         """
         super(CohortDiscussionTopicsTest, self).setUp()
 
-        self.discussion_id = "test_discussion_{}".format(uuid.uuid4().hex)
-        self.course_fixture = CourseFixture(**self.course_info).add_children(
-            XBlockFixtureDesc("chapter", "Test Section").add_children(
-                XBlockFixtureDesc("sequential", "Test Subsection").add_children(
-                    XBlockFixtureDesc("vertical", "Test Unit").add_children(
-                        XBlockFixtureDesc(
-                            "discussion",
-                            "Test Discussion",
-                            metadata={"discussion_id": self.discussion_id}
-                        )
-                    )
-                )
-            )
-        ).install()
-
-        # create course with single cohort and two content groups (user_partition of type "cohort")
-        self.cohort_name = "OnlyCohort"
-        self.setup_cohort_config(self.course_fixture)
-        self.cohort_id = self.add_manual_cohort(self.course_fixture, self.cohort_name)
-
-        # login as an instructor
-        self.instructor_name = "instructor_user"
-        self.instructor_id = AutoAuthPage(
-            self.browser, username=self.instructor_name, email="instructor_user@example.com",
-            course_id=self.course_id, staff=True
-        ).visit().get_user_id()
-
-        # go to the membership page on the instructor dashboard
-        self.instructor_dashboard_page = InstructorDashboardPage(self.browser, self.course_id)
-        self.instructor_dashboard_page.visit()
-        self.cohort_management_page = self.instructor_dashboard_page.select_cohort_management()
         self.course_wide_key = 'course-wide'
         self.inline_key = 'inline'
 
@@ -700,10 +669,13 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
             "Course-Wide Discussion Topics",
             self.cohort_management_page.cohort_discussion_heading_is_visible(self.course_wide_key)
         )
+        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.course_wide_key))
+
         self.assertEqual(
             "Content-Specific Discussion Topics",
             self.cohort_management_page.cohort_discussion_heading_is_visible(self.inline_key)
         )
+        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.inline_key))
 
     def test_cohort_course_wide_discussion_topic(self):
         """
@@ -719,8 +691,6 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
 
         cohorted_topics_before = self.cohort_management_page.get_cohorted_topics_count(self.course_wide_key)
 
-        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.course_wide_key))
-
         self.cohort_management_page.select_discussion_topic(self.course_wide_key)
 
         self.assertFalse(self.cohort_management_page.is_save_button_disabled(self.course_wide_key))
@@ -730,15 +700,20 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
 
         # I see a success message.
         self._verify_changes_saved(key=self.course_wide_key)
-        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.course_wide_key))
+
 
         cohorted_topics_after = self.cohort_management_page.get_cohorted_topics_count(self.course_wide_key)
         self.assertNotEqual(cohorted_topics_before, cohorted_topics_after)
 
     def test_always_cohort_inline_topics_enabled(self):
         """
+        Scenario: cohort a course-wide discussion.
 
-        :return:
+        Given I have a course with a cohort defined,
+        And a course-wide discussion with disabled Save button.
+        When I view the course-wide discussion topics in
+        the LMS instructor dashboard
+        There is a link to show me the discussion topics.
         """
         self.cohort_discussion_topics_are_visible()
 
@@ -749,8 +724,13 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
 
     def test_cohort_some_inline_topics_enabled(self):
         """
+        Scenario: cohort a course-wide discussion.
 
-        :return:
+        Given I have a course with a cohort defined,
+        And a course-wide discussion with disabled Save button.
+        When I view the course-wide discussion topics in
+        the LMS instructor dashboard
+        There is a link to show me the discussion topics.
         """
         self.cohort_discussion_topics_are_visible()
 
@@ -770,21 +750,23 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
         There is a link to show me the discussion topics.
         """
         self.cohort_discussion_topics_are_visible()
-        from nose.tools import set_trace; set_trace()
+
+        # enable some inline discussion topics.
+        self.cohort_management_page.select_cohort_some_inline_discussion()
 
         cohorted_topics_before = self.cohort_management_page.get_cohorted_topics_count(self.inline_key)
 
-        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.inline_key))
+        # check the discussion topic.
+        self.cohort_management_page.select_discussion_topic(self.inline_key)
 
-        self.cohort_management_page.select_course_wide_discussion()
-
+        # Save button enabled.
         self.assertFalse(self.cohort_management_page.is_save_button_disabled(self.inline_key))
 
-        # click on the course-wide save button.
+        # click on the inline save button.
         self.cohort_management_page.save_discussion_topics(self.inline_key)
 
+        # verifies that changes saved successfully.
         self._verify_changes_saved(key=self.inline_key)
-        self.assertTrue(self.cohort_management_page.is_save_button_disabled(self.inline_key))
 
         cohorted_topics_after = self.cohort_management_page.get_cohorted_topics_count(self.inline_key)
         self.assertNotEqual(cohorted_topics_before, cohorted_topics_after)
@@ -793,8 +775,8 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
         confirmation_message = self.cohort_management_page.get_cohort_discussions_message(key=key)
         self.assertEqual("Changes Saved.", confirmation_message)
 
-    def _assert_cohorted_topics(self, key):
-        pass
+        # save button disabled again.
+        self.assertTrue(self.cohort_management_page.is_save_button_disabled(key))
 
 
 @attr('shard_3')
