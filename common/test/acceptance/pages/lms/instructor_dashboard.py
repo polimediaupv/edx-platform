@@ -468,7 +468,7 @@ class CohortManagementSection(PageObject):
         Returns the visibility status of cohort discussion controls.
         """
         EmptyPromise(
-            lambda: self.q(css=self._bounded_selector('.cohort-course-wide-discussions-nav')).results != 0,
+            lambda: self.q(css=self._bounded_selector('.cohort-discussions-nav')).results != 0,
             "Waiting for discussion section to show"
         ).fulfill()
 

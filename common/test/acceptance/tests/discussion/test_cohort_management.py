@@ -725,33 +725,32 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
 
         Given I have a course with a cohort defined,
         And a course-wide discussion with disabled Save button.
-        When I click on the course-wide discussion topic(checkbox)
+        When I click on the course-wide discussion topic
         Then I see the enabled save button
-        There is a link to show me the discussion topics.
+        When I click on save button
+        Then I see success message.
         """
         self.cohort_discussion_topics_are_visible()
 
         cohorted_topics_before = self.cohort_management_page.get_cohorted_topics_count(self.course_wide_key)
-
         self.cohort_management_page.select_discussion_topic(self.course_wide_key)
 
         self.assertFalse(self.cohort_management_page.is_save_button_disabled(self.course_wide_key))
 
-        # I see a success message.
         self.save_and_verify_discussion_topics(key=self.course_wide_key)
         cohorted_topics_after = self.cohort_management_page.get_cohorted_topics_count(self.course_wide_key)
 
         self.assertNotEqual(cohorted_topics_before, cohorted_topics_after)
 
-    def test_always_cohort_inline_topics_enabled(self):
+    def test_always_cohort_inline_topic_enabled(self):
         """
-        Scenario: cohort a course-wide discussion.
+        Scenario: Select the always_cohort_inline_topics radio button
 
         Given I have a course with a cohort defined,
-        And a course-wide discussion with disabled Save button.
-        When I view the course-wide discussion topics in
-        the LMS instructor dashboard
-        There is a link to show me the discussion topics.
+        And a inline discussion topic with disabled Save button.
+        When I click on always_cohort_inline_topics
+        Then I see enabled save button
+        And I see disabled inline discussion topics.
         """
         self.cohort_discussion_topics_are_visible()
 
@@ -762,40 +761,42 @@ class CohortDiscussionTopicsTest(UniqueCourseTest, CohortTestMixin):
 
     def test_cohort_some_inline_topics_enabled(self):
         """
-        Scenario: Select the cohort some inline discussion radio button.
+        Scenario: Select the cohort_some_inline_topics radio button
 
         Given I have a course with a cohort defined,
-        And inline discussion topic.
-        When I click the course-wide discussion topics in
-        the LMS instructor dashboard
-        There is a link to show me the discussion topics.
+        And a inline discussion topic with disabled Save button.
+        When I click on cohort_some_inline_topics
+        Then I see enabled save button
+        And I see enabled inline discussion topics.
         """
         self.cohort_discussion_topics_are_visible()
 
-        # enable some inline discussion topics.
+        # enable some inline discussion topic radio button.
         self.cohort_management_page.select_cohort_some_inline_discussion()
-        # save button is enabled
+        # I see that save button is enabled
         self.assertFalse(self.cohort_management_page.is_save_button_disabled(self.inline_key))
-
+        # I see that inline discussion topics are enabled
         self.assertFalse(self.cohort_management_page.inline_discussion_topics_disabled())
 
     def test_cohort_inline_discussion_topic(self):
         """
-        Scenario: cohort a course-wide discussion.
+        Scenario: cohort inline discussion topic.
 
         Given I have a course with a cohort defined,
-        And a course-wide discussion with disabled Save button.
-        When I view the course-wide discussion topics in
-        the LMS instructor dashboard
-        There is a link to show me the discussion topics.
+        And a inline discussion topic with disabled Save button.
+        When I click on cohort_some_inline_discussion_topics
+        Then I see enabled saved button
+        And When I click on inline discussion topic
+        And I see enabled save button
+        And When i click save button
+        Then I see success message.
         """
         self.cohort_discussion_topics_are_visible()
 
-        # enable some inline discussion topics.
+        # select some inline discussion topics radio button.
         self.cohort_management_page.select_cohort_some_inline_discussion()
 
         cohorted_topics_before = self.cohort_management_page.get_cohorted_topics_count(self.inline_key)
-
         # check the discussion topic.
         self.cohort_management_page.select_discussion_topic(self.inline_key)
 
