@@ -468,7 +468,7 @@ class CohortManagementSection(PageObject):
         Returns the visibility status of cohort discussion controls.
         """
         EmptyPromise(
-            lambda: self.q(css=self._bounded_selector('.cohort-discussions-nav')).results != 0,
+            lambda: self.q(css=self._bounded_selector('.cohort-course-wide-discussions-nav')).results != 0,
             "Waiting for discussion section to show"
         ).fulfill()
 
@@ -477,35 +477,35 @@ class CohortManagementSection(PageObject):
 
     def select_discussion_topic(self, key):
         """
-
-        :return:
+        Selects discussion topic checkbox by clicking on it.
         """
         self.q(css=self._bounded_selector(".check-discussion-subcategory-%s" % key)).first.click()
 
     def select_always_inline_discussion(self):
         """
-
-        :return:
+        Selects the always_cohort_inline_discussions radio button.
         """
         self.q(css=self._bounded_selector(".check-all-inline-discussions")).first.click()
 
     def select_cohort_some_inline_discussion(self):
         """
-
-        :return:
+        Selects the cohort_some_inline_discussions radio button.
         """
         self.q(css=self._bounded_selector(".check-cohort-inline-discussions")).first.click()
 
     def inline_discussion_topics_disabled(self):
         """
-        Check if save button is disabled.
+        Returns the status of inline discussion topics, enabled or disabled.
         """
-        topics = self.q(css=self._bounded_selector('.check-discussion-subcategory-inline'))
-        return all(topic.get_attribute('disabled') == 'true' for topic in topics)
+        inline_topics = self.q(css=self._bounded_selector('.check-discussion-subcategory-inline'))
+        disabled = all(topic.get_attribute('disabled') == 'true' for topic in inline_topics)
+        if disabled == 'false':
+            return False
+        return True
 
     def is_save_button_disabled(self, key):
         """
-        Check if save button is disabled.
+        Returns the status for form's save button, enabled or disabled.
         """
         save_button_css = '%s %s' % (self.discussion_form_selectors[key], '.action-save')
         disabled = self.q(css=self._bounded_selector(save_button_css)).attrs('disabled')
@@ -514,26 +514,29 @@ class CohortManagementSection(PageObject):
 
         return False
 
+    def is_category_selected(self):
+        """
+        Returns the status for category checkboxes.
+        """
+        return self.q(css=self._bounded_selector('.check-discussion-category:checked')).is_present()
+
     def get_cohorted_topics_count(self, key):
         """
-        Check if save button is disabled.
+        Returns the count for cohorted topics.
         """
-        cohorted_topics_css = '.check-discussion-subcategory-%s:checked' % key
-        cohorted_topics = self.q(css=self._bounded_selector(cohorted_topics_css))
+        cohorted_topics = self.q(css=self._bounded_selector('.check-discussion-subcategory-%s:checked' % key))
         return len(cohorted_topics.results)
 
     def save_discussion_topics(self, key):
         """
-
-        :return:
+        Saves the discussion topics.
         """
         save_button_css = '%s %s' % (self.discussion_form_selectors[key], '.action-save')
         self.q(css=self._bounded_selector(save_button_css)).first.click()
 
     def get_cohort_discussions_message(self, key, msg_type="confirmation"):
         """
-        Returns an array of messages related to modifying cohort settings. If wait_for_messages
-        is True, will wait for a message to appear.
+        Returns the message related to modifying discussion topics.
         """
         title_css = "%s .message-%s .message-title" % (self.discussion_form_selectors[key], msg_type)
 
@@ -549,6 +552,9 @@ class CohortManagementSection(PageObject):
         return message_title.first.text[0]
 
     def cohort_discussion_heading_is_visible(self, key):
+        """
+        Returns the visibility of discussion topic headings.
+        """
         form_heading_css = '%s %s' % (self.discussion_form_selectors[key], '.subsection-title')
         discussion_heading = self.q(css=self._bounded_selector(form_heading_css))
 
@@ -558,7 +564,7 @@ class CohortManagementSection(PageObject):
 
     def cohort_management_controls_visible(self):
         """
-        Return the visibility status of cohort management controls(cohort selector section etc).
+        Returns the visibility of discussion topics.
         """
         return (self.q(css=self._bounded_selector('.cohort-management-nav')).visible and
                 self.q(css=self._bounded_selector('.wrapper-cohort-supplemental')).visible)
