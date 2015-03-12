@@ -15,13 +15,14 @@ from xmodule import tabs
 from xmodule.modulestore.tests.django_utils import (
     TEST_DATA_MIXED_TOY_MODULESTORE, TEST_DATA_MIXED_CLOSED_MODULESTORE
 )
+
+from courseware.tabs import get_course_tab_list
 from courseware.views import get_static_tab_contents, static_tab
 from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
 
-if settings.FEATURES.get('MILESTONES_APP', False):
-    from courseware.tabs import get_course_tab_list
+if settings.FEATURES.get('ENTRANCE_EXAMS', False):
     from milestones import api as milestones_api
     from milestones.models import MilestoneRelationshipType
 
