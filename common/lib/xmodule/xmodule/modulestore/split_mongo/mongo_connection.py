@@ -80,17 +80,33 @@ class MongoConnection(object):
         """
         Create & open the connection, authenticate, and provide pointers to the collections
         """
-        self.database = MongoProxy(
-            pymongo.database.Database(
-                pymongo.MongoClient(
+        if 'replicaSet' not in kwargs:
+
+
+                self.database = MongoProxy(pymongo.database.Database(
+                 pymongo.MongoClient(
                     host=host,
+                    port=port,
+                    document_class=dict,
+                    tz_aware=tz_aware,
+                    **kwargs
+                 ),
+                 db
+               ),
+               wait_time=retry_wait_time
+        )
+        else:
+
+                self.database = MongoProxy(pymongo.database.Database(
+                 pymongo.MongoReplicaSetClient(
+                    host = ', '.join(host),
                     port=port,
                     tz_aware=tz_aware,
                     **kwargs
-                ),
-                db
-            ),
-            wait_time=retry_wait_time
+                 ),
+                 db
+               ),
+               wait_time=retry_wait_time
         )
 
         if user is not None and password is not None:

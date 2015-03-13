@@ -516,19 +516,35 @@ class MongoModuleStore(ModuleStoreDraftAndPublished, ModuleStoreWriteBase, Mongo
             """
             Create & open the connection, authenticate, and provide pointers to the collection
             """
-            self.database = MongoProxy(
-                pymongo.database.Database(
-                    pymongo.MongoClient(
-                        host=host,
-                        port=port,
-                        tz_aware=tz_aware,
-                        document_class=dict,
-                        **kwargs
-                    ),
-                    db
-                ),
-                wait_time=retry_wait_time
+            if 'replicaSet' not in kwargs:
+
+
+                self.database = MongoProxy(pymongo.database.Database(
+                 pymongo.MongoClient(
+                    host=host,
+                    port=port,
+                    document_class=dict,
+                    tz_aware=tz_aware,
+                    **kwargs
+                 ),
+                 db
+               ),
+               wait_time=retry_wait_time
             )
+            else:
+
+                self.database = MongoProxy(pymongo.database.Database(
+                 pymongo.MongoReplicaSetClient(
+                    host = ', '.join(host),
+                    port=port,
+                    tz_aware=tz_aware,
+                    **kwargs
+                 ),
+                 db
+               ),
+               wait_time=retry_wait_time
+            )
+            
             self.collection = self.database[collection]
 
             # Collection which stores asset metadata.
