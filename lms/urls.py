@@ -95,6 +95,13 @@ urlpatterns += (
     url(r'^course_modes/', include('course_modes.urls')),
 )
 
+if hasattr(settings, "ALLOW_PROFILE_EDITING"):
+    urlpatterns += (
+        url(r'^edit_profile$', 'student.views.edit_profile', name="update_user"),
+        url(r'^deactivate$', 'student.views.deactivate_user', name="deactivate_user"),
+)
+else:
+    urlpatterns += ()
 
 js_info_dict = {
     'domain': 'djangojs',
