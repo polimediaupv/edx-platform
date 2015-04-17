@@ -23,7 +23,7 @@ from django.core.validators import validate_email, validate_slug, ValidationErro
 from django.db import IntegrityError, transaction
 from django.http import (HttpResponse, HttpResponseBadRequest, HttpResponseForbidden,
                          Http404)
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.translation import ungettext
 from django_future.csrf import ensure_csrf_cookie
 from django.utils.http import cookie_date, base36_to_int
@@ -112,6 +112,9 @@ from openedx.core.djangoapps.user_api.api import profile as profile_api
 import analytics
 from eventtracking import tracker
 
+from student.forms import UserProfileForm
+
+from django_countries import countries
 
 log = logging.getLogger("edx.student")
 AUDIT_LOG = logging.getLogger("audit")
@@ -387,6 +390,44 @@ def signin_user(request):
     }
 
     return render_to_response('login.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def deactivate_user(request):
+
+
+    u = request.user
+    up = UserProfile.objects.get(user=request.user)
+    u.email = str(u.id) + "@baja.com"
+    u.is_active = False
+    u.username =  str(u.id)
+    up.mailing_address = "" #None
+    up.goals = "" #None
+    up.name = str(u.id)
+    u.save()
+    up.save()
+
+    return redirect(reverse('logout'))
+
+@login_required
+def edit_profile(request):
+
+    up = UserProfile.objects.get(user=request.user)
+    profile_form = UserProfileForm(request.POST or None, instance=up)
+    if '_update' in request.POST:
+        if profile_form.is_valid():
+           profile_form.save()
+           #return render_to_response('edit.html/#apply_change_profile', locals())
+           return redirect(reverse('update_user'))
+
+
+        #return render_to_response('edit.html', locals())
+    elif '_cancel' in request.POST:
+        return redirect(reverse('dashboard'))
+    #else:
+    return render_to_response('edit.html', locals())
+
+
 
 
 @ensure_csrf_cookie

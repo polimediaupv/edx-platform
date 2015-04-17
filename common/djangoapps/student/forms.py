@@ -13,6 +13,7 @@ from django.template import loader
 from django.conf import settings
 from microsite_configuration import microsite
 
+from student.models import UserProfile
 
 class PasswordResetFormNoActive(PasswordResetForm):
     def clean_email(self):
@@ -70,3 +71,11 @@ class PasswordResetFormNoActive(PasswordResetForm):
             subject = subject.replace('\n', '')
             email = loader.render_to_string(email_template_name, context)
             send_mail(subject, email, from_email, [user.email])
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+
+        model = UserProfile
+        # The fields we allow to change in the edit_profile form
+        fields = ['level_of_education', 'goals', 'country', 'gender', 'year_of_birth', 'mailing_address', 'city']

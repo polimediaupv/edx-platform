@@ -26,7 +26,10 @@ class MongoContentStore(ContentStore):
         :param collection: ignores but provided for consistency w/ other doc_store_config patterns
         """
         logging.debug('Using MongoDB for static content serving at host={0} port={1} db={2}'.format(host, port, db))
-        _db = pymongo.database.Database(
+        if 'replicaSet' not in kwargs:
+
+
+            _db = pymongo.database.Database(
             pymongo.MongoClient(
                 host=host,
                 port=port,
@@ -35,7 +38,16 @@ class MongoContentStore(ContentStore):
             ),
             db
         )
+        else:
 
+            _db = pymongo.database.Database(
+            pymongo.MongoReplicaSetClient(
+                host = ', '.join(host),
+                port=port,
+                **kwargs
+            ),
+            db
+        )
         if user is not None and password is not None:
             _db.authenticate(user, password)
 
