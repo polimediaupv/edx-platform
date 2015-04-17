@@ -135,6 +135,7 @@ generate_merge:
         - mako.po
         - mako-studio.po
         - messages.po
+        - upv.po
         - wiki.po
     djangojs.po:
         - djangojs-partial.po
