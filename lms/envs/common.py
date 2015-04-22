@@ -1422,7 +1422,7 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 BULK_EMAIL_DEFAULT_FROM_EMAIL = 'no-reply@example.com'
 
 # Parameters for breaking down course enrollment into subtasks.
-BULK_EMAIL_EMAILS_PER_TASK = 100
+BULK_EMAIL_EMAILS_PER_TASK = 10
 
 # Initial delay used for retrying tasks.  Additional retries use
 # longer delays.  Value is in seconds.
@@ -1448,7 +1448,7 @@ BULK_EMAIL_LOG_SENT_EMAILS = False
 # when a bulk email task is retried for rate-related reasons.  Choose this
 # value depending on the number of workers that might be sending email in
 # parallel, and what the SES rate is.
-BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 0.02
+BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 0.2
 
 ############################# Email Opt In ####################################
 

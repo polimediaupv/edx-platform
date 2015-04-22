@@ -46,7 +46,7 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # IMPORTANT: With this enabled, the server must always be behind a proxy that
