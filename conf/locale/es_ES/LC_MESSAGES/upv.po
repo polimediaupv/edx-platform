@@ -152,4 +152,19 @@ msgid "Yes, I want to unsubscribe"
 msgstr "Sí, quiero darme de baja"
 #: themes/default/templates/courseware/course_about.html
 msgid "This course runs in edx.org"
-msgstr "Este curso se realiza en edx.org"
+msgstr "Este curso se realizará en edx.org"
+#: themes/default/templates/course.html
+msgid "New"
+msgstr "Nuevo"
+#: themes/default/templates/dashboard/_dashboard_course_listing.html
+msgid "Course Completed - {end_date}"
+msgstr "Curso finalizado - {end_date}"
+#: themes/default/templates/dashboard/_dashboard_course_listing.html
+msgid "Course Started - {start_date}"
+msgstr "Curso iniciado - {start_date}"
+#: themes/default/templates/dashboard/_dashboard_course_listing.html
+msgid "Course has not yet started"
+msgstr "Curso todavía no iniciado"
+#: themes/default/templates/dashboard/_dashboard_course_listing.html
+msgid "Course Starts - {start_date}"
+msgstr "Inicio del curso - {start_date}"
