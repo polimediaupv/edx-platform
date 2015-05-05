@@ -168,3 +168,10 @@ msgstr "Curso todavía no iniciado"
 #: themes/default/templates/dashboard/_dashboard_course_listing.html
 msgid "Course Starts - {start_date}"
 msgstr "Inicio del curso - {start_date}"
+#: lms/templates/discussion/_underscore_templates.html:322
+msgid "How to use {platform_name} discussions"
+msgstr "Cómo usar los foros de {platform_name}"
+#: lms/templates/login.html
+msgid "Your request could not be completed. Please try again."
+msgstr "No se pudo antender tu petición. Por favor, inténtalo de nuevo."
+

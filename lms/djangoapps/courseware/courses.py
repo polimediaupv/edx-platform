@@ -285,10 +285,13 @@ def get_course_info_section(request, course, section_key):
     """
     info_module = get_course_info_section_module(request, course, section_key)
 
-    lang_to_locale_dict={'es-es':'es_ES.utf8', 'en': 'en_US.utf8', 'ca@valencia' : 'ca_ES.utf8@valencia'}
+    lang_to_locale_dict={'es-es':'es_ES.utf8', 'en':'en_US.utf8', 'ca@valencia':'ca_ES.utf8@valencia'}
 
 
     cur_lang_code = UserPreference.get_preference(request.user, LANGUAGE_KEY) #User preferred language
+    if cur_lang_code is None:
+        cur_lang_code = 'es-es'
+
     cur_lang_code_mod = lang_to_locale_dict[cur_lang_code] # We obtain the locale
 
     locale.setlocale(locale.LC_ALL, (cur_lang_code_mod))

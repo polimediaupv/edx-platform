@@ -486,7 +486,7 @@ msgstr "Demasiados intentos de inicio de sesión fallidos. Pruebe de nuevo más 
 
 #: common/djangoapps/student/views.py:1107
 msgid "Email or password is incorrect."
-msgstr "E-mail o contraseña incorrecto."
+msgstr "Correo electrónico o contraseña incorrectos."
 
 #: common/djangoapps/student/views.py:1173
 msgid ""

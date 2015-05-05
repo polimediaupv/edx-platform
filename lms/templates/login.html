@@ -57,7 +57,7 @@
         } else {
           $('.third-party-signin.message').removeClass('is-shown');
           $('.message.submission-error').addClass('is-shown').focus();
-          $('.message.submission-error').html(gettext("Your request could not be completed.  Please try again."));
+          $('.message.submission-error').html("${_('Your request could not be completed. Please try again.')}");
         }
       });
 
