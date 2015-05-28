@@ -47,6 +47,7 @@
                 future=[]
                 past=[]
                 reordered=[]
+                nivelacion=[]
                 for course in courses:
                     if course.end == None:
                         course.end = timezone.now() + datetime.timedelta(days=1)
@@ -58,15 +59,17 @@
                 past = sorted(past, key=lambda course: course.start,reverse=True)
                 reordered = future + past
                 nivelacion_cursos = ["numerosyterminologia", "derivadas", "integrales", "algebra", "intromateria", "introenlace", "introformulacion", "introreacciones", "fundamentosmecanica", "fundamentoselectromagnetismo"]
-
+                for course in reordered:
+                    if course.display_org_with_default.lower() == "poc"  and  course.display_number_with_default.lower() in nivelacion_cursos and course.end >= timezone.now() :
+                       nivelacion.append(course)
+                       
+                nivelacion = sorted(nivelacion, key=lambda course: course.start)
             %>
 
-	%for course in reordered:
-		% if course.display_org_with_default.lower() == "poc"  and  course.display_number_with_default.lower() in nivelacion_cursos and course.end >= timezone.now() :
+	%for course in nivelacion:
                        <li class="courses-listing-item">
                                <%include file="../course.html" args="course=course" />
                        </li>
-		% endif
         %endfor
       </ul>
       <script type="text/javascript">
