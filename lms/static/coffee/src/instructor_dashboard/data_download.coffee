@@ -188,7 +188,7 @@ class ReportDownloads
       minWidth: 150
       cssClass: "file-download-link"
       formatter: (row, cell, value, columnDef, dataContext) ->
-        '<a href="' + dataContext['url'] + '">' + dataContext['name'] + '</a>'
+        '<a href="' + dataContext['url'].replace('file:///mnt/corentine','') + '">' + dataContext['name'] + '</a>'
     ]
 
     $table_placeholder = $ '<div/>', class: 'slickgrid'
