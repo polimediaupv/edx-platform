@@ -1448,7 +1448,7 @@ BULK_EMAIL_LOG_SENT_EMAILS = False
 # when a bulk email task is retried for rate-related reasons.  Choose this
 # value depending on the number of workers that might be sending email in
 # parallel, and what the SES rate is.
-BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 0.2
+BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 2
 
 ############################# Email Opt In ####################################
 
@@ -1692,7 +1692,7 @@ GRADES_DOWNLOAD_ROUTING_KEY = HIGH_MEM_QUEUE
 GRADES_DOWNLOAD = {
     'STORAGE_TYPE': 'localfs',
     'BUCKET': 'edx-grades',
-    'ROOT_PATH': '/tmp/edx-s3/grades',
+    'ROOT_PATH': '/mnt/corentine/grades',
 }
 
 ######################## PROGRESS SUCCESS BUTTON ##############################
