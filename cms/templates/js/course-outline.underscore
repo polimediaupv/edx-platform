@@ -78,6 +78,12 @@ if (xblockInfo.get('graded')) {
                         </a>
                     </li>
                 <% } %>
+                <li class="action-item action-duplicate">
+                    <a href="#" data-tooltip="<%= gettext('Duplicate') %>" class="duplicate-button action-button">
+                    <i class="icon fa fa-copy"></i>
+                    <span class="sr action-button-text"><%= gettext('Duplicate') %></span>
+                    </a>
+                </li>
                 <% if (xblockInfo.canBeDeleted()) { %>
                     <li class="action-item action-delete">
                         <a href="#" data-tooltip="<%= gettext('Delete') %>" class="delete-button action-button">
