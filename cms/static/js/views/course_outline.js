@@ -166,6 +166,31 @@ define(["jquery", "underscore", "js/views/xblock_outline", "js/views/utils/view_
                 }
             },
 
+            findXBlockElement: function(target) {
+                return $(target).closest('.studio-xblock-wrapper');
+            },
+
+            duplicateXBlock: function() {
+                var self = this;
+                xblockElement = this.findXBlockElement(this);
+                parent = xblockElement.parent();
+
+                ViewUtils.runOperationShowingMessage(gettext('Duplicating'),
+                    function() {
+                        data = {"duplicate_source_locator":self.model.id,"parent_locator":self.parentInfo.id};
+                        return $.postJSON("/xblock/",data,function(json){})
+                            .success(function(json){
+                                    if(self.model.attributes.category=='chapter'){
+                                        ViewUtils.reload();
+                                    }
+                                    else{
+                                        self.refresh(self.createNewItemViewState(json.locator));
+                                    }
+                                })
+                            .fail(function(){self.refresh();});
+                    })
+            },
+
             addButtonActions: function(element) {
                 XBlockOutlineView.prototype.addButtonActions.apply(this, arguments);
                 element.find('.configure-button').click(function(event) {
@@ -175,6 +200,10 @@ define(["jquery", "underscore", "js/views/xblock_outline", "js/views/utils/view_
                 element.find('.publish-button').click(function(event) {
                     event.preventDefault();
                     this.publishXBlock();
+                }.bind(this));
+                element.find('.duplicate-button').click(function(event) {
+                    event.preventDefault();
+                    this.duplicateXBlock();
                 }.bind(this));
             },
 
