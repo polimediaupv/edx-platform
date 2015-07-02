@@ -1448,7 +1448,7 @@ BULK_EMAIL_LOG_SENT_EMAILS = False
 # when a bulk email task is retried for rate-related reasons.  Choose this
 # value depending on the number of workers that might be sending email in
 # parallel, and what the SES rate is.
-BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 2
+BULK_EMAIL_RETRY_DELAY_BETWEEN_SENDS = 0.2
 
 ############################# Email Opt In ####################################
 
@@ -1678,9 +1678,11 @@ REGISTRATION_EXTRA_FIELDS = {
     'goals': 'optional',
     'honor_code': 'required',
     'terms_of_service': 'hidden',
-    'city': 'hidden',
-    'country': 'hidden',
+    'city': 'optional',
+    'country': 'optional',
 }
+
+EXTENDED_PROFILE_FIELDS	 = [ "awareness" ]
 
 ########################## CERTIFICATE NAME ########################
 CERT_NAME_SHORT = "Certificate"
@@ -1692,7 +1694,7 @@ GRADES_DOWNLOAD_ROUTING_KEY = HIGH_MEM_QUEUE
 GRADES_DOWNLOAD = {
     'STORAGE_TYPE': 'localfs',
     'BUCKET': 'edx-grades',
-    'ROOT_PATH': '/mnt/corentine/grades',
+    'ROOT_PATH': '/tmp/edx-s3/grades',
 }
 
 ######################## PROGRESS SUCCESS BUTTON ##############################

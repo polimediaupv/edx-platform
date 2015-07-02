@@ -1625,7 +1625,8 @@ def create_account(request, post_override=None):  # pylint: disable-msg=too-many
     # allow microsites to define 'extended profile fields' which are
     # captured on user signup (for example via an overriden registration.html)
     # and then stored in the UserProfile
-    extended_profile_fields = microsite.get_value('extended_profile_fields', [])
+    # extended_profile_fields = microsite.get_value('extended_profile_fields', [])
+    extended_profile_fields = microsite.get_value('extended_profile_fields', getattr(settings, 'EXTENDED_PROFILE_FIELDS', []))
     extended_profile = None
 
     for field in extended_profile_fields:

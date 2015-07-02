@@ -10,6 +10,7 @@ file and check it in at the same time as your model changes. To do that,
 2. ./manage.py lms schemamigration student --auto description_of_your_change
 3. Add the migration file created in edx-platform/common/djangoapps/student/migrations/
 """
+# -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 import hashlib
 import json
@@ -227,6 +228,22 @@ class UserProfile(models.Model):
     gender = models.CharField(
         blank=True, null=True, max_length=6, db_index=True, choices=GENDER_CHOICES
     )
+    AWARENESS_CHOICES = ((1, u'P\xe1gina web de la UPV'), 
+                      (2, 'Facebook de la UPV'),
+                      (3, 'Twitter de la UPV'),
+                      (4, 'Google+ de la UPV'),
+                      (5,  'Canal de Youtube de la UPV'),
+                      (6, u'Bolet\xedn del CFP de la UPV'),
+                      (7, 'Comentario de Facebook'),
+                      (8, u'Me lo recomend\xf3 un amigo'),
+                      (9, 'Buscando en Google'),
+                      (10, 'Noticia en Internet'),
+                      (11, 'Noticia en la prensa, tv, radio, etc..'),
+                      (12, 'Otros'),
+                      (13, 'No especificado'),
+                      (14, 'Twitter')
+        )
+    
 
     # [03/21/2013] removed these, but leaving comment since there'll still be
     # p_se and p_oth in the existing data in db.
