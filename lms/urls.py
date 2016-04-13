@@ -16,6 +16,7 @@ urlpatterns = ('',  # nopep8
     url(r'^request_certificate$', 'certificates.views.request_certificate'),
     url(r'^$', 'branding.views.index', name="root"),   # Main marketing page, or redirect to courseware
     url(r'^nivelacion$', 'courseware.views.nivelacion', name="nivelacion"),
+    url(r'^masterinteligenciaartificial$', 'courseware.views.intartificialmaster', name="masterinteligenciaartificial"),
     url(r'^dashboard$', 'student.views.dashboard', name="dashboard"),
     url(r'^login_ajax$', 'student.views.login_user', name="login"),
     url(r'^login_ajax/(?P<error>[^/]*)$', 'student.views.login_user'),
