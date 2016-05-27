@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from ratelimitbackend import admin
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 
 import django.contrib.auth.views
 from microsite_configuration import microsite
@@ -80,6 +82,8 @@ urlpatterns = ('',  # nopep8
 
     # CourseInfo API RESTful endpoints
     url(r'^api/course/details/v0/', include('course_about.urls')),
+
+    url(r'^sitemap.xml$', TemplateView.as_view(template_name='sitemap.xml')),
 
 )
 
