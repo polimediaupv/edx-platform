@@ -27,6 +27,8 @@ urlpatterns = ('',  # nopep8
 
     url(r'^admin_dashboard$', 'dashboard.views.dashboard'),
 
+    url(r'^cursomooctecnologias$', TemplateView.as_view(template_name='landingupvx.html')),
+
     url(r'^change_email$', 'student.views.change_email_request', name="change_email"),
     url(r'^email_confirm/(?P<key>[^/]*)$', 'student.views.confirm_email_change'),
     url(r'^change_name$', 'student.views.change_name_request', name="change_name"),
