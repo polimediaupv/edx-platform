@@ -48,7 +48,7 @@
                     if course.end == None: 
                          course.end = timezone.now() + datetime.timedelta(days=1)
                 nivelacion = []
-                nivelacion_cursos = ["planificacionautomatica", "sistemasrecomendacion","bigdata", "aprendizajeautomatico", "datostemporalescomplejos", "extraccioninformacion", "heuristicaavanzada", "introinvestigacion", "metodosnosupervisados", "metodossupervisados", "presentacion", "procesalenguajenatural", "razonamientoautomatico", "razonamientorestricciones", "resproblemasmetaheuristicos", "semanticasavanzadas","sistemasmultiagente", "tecnavanzadasconocimientorazonamiento", "websemantica"]
+                nivelacion_cursos = ["planificacionautomatica", "sistemasrecomendacion","bigdata", "aprendizajeautomatico", "datostemporalescomplejos", "extraccioninformacion", "heuristicaavanzada", "introinvestigacion", "metodosnosupervisados", "metodossupervisados", "presentacion", "procesalenguajenatural", "razonamientoautomatico", "razonamientorestricciones", "resproblemasmetaheuristicos", "semanticasavanzadas","sistemasmultiagente", "tecnavanzadascyr", "websemantica"]
                 for course in courses:
                     if course.display_org_with_default.lower() == "poc"  and  course.display_number_with_default.lower() in nivelacion_cursos and course.end >= timezone.now() :
                        nivelacion.append(course)
